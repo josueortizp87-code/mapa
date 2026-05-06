@@ -5,19 +5,17 @@
   <title>Mapa de Trabajos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Estilo del mapa -->
-  https://unpkg.com/leaflet@1.9.4/dist/leaflet.css
-
-  <style>
-    body, html {
-      margin: 0;
+  <!-- ✅ CSS de Leaflet -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+ n: 0;
       padding: 0;
       height: 100%;
     }
-
     #map {
-      height: 100%;
       width: 100%;
+      height: 100%;
     }
   </style>
 </head>
@@ -25,45 +23,35 @@
 
 <div id="map"></div>
 
-<!-- Librería del mapa -->
-https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<script>
-  // 1️⃣ Crear el mapa centrado en Juticalpa
+<!-- ✅ JS de Leaflet -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.jscript>
+  // 1️⃣ Crear el mapa
   const map = L.map('map').setView([14.65, -86.21], 13);
 
-  // 2️⃣ Cargar el mapa base (calles)
+  // 2️⃣ Cargar el mapa base
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap'
   }).addTo(map);
 
-  // 3️⃣ Pedir los puntos a Cloudflare
+  // 3️⃣ Puntos desde Cloudflare
   fetch("https://TU-WORKER.workers.dev/")
     .then(res => res.json())
     .then(data => {
+      data.forEach(r => {
 
-      data.forEach(registro => {
-
-        // Punto inicial
-        if (registro.lat_inicio && registro.lng_inicio) {
-          L.marker([registro.lat_inicio, registro.lng_inicio])
+        if (r.lat_inicio && r.lng_inicio) {
+          L.marker([r.lat_inicio, r.lng_inicio])
             .addTo(map)
-            .bindPopup(
-              "Inicio<br>Circuito: " + registro.circuito
-            );
+            .bindPopup("Inicio<br>Circuito: " + r.circuito);
         }
 
-        // Punto final
-        if (registro.lat_final && registro.lng_final) {
-          L.marker([registro.lat_final, registro.lng_final])
+        if (r.lat_final && r.lng_final) {
+          L.marker([r.lat_final, r.lng_final])
             .addTo(map)
-            .bindPopup(
-              "Fin<br>Circuito: " + registro.circuito
-            );
+            .bindPopup("Fin<br>Circuito: " + r.circuito);
         }
 
       });
-
     });
 </script>
 
