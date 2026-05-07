@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Subir foto a Cloudflare R2</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+  <h2>Prueba: Subir foto a R2</h2>
+
+  <input type="file" id="foto">
+  <br><br>
+  <button onclick="subirFoto()">Subir foto</button>
+
+  <p id="resultado"></p>
+
+  <script>
+    function subirFoto() {
+      const archivo = document.getElementById("foto").files[0];
+
+      if (!archivo) {
+        alert("Primero selecciona una foto");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("foto", archivo);
+
+      fetch("https://api-cuadrillas.cgujuticalpa.workers.dev/subir-foto", {
+        method: "POST",
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.ok) {
+          document.getElementById("resultado").innerHTML =
+            "✅ Foto subida correctamente:<br>" +
+            "<a href='" + data.url + "' target='_blank'>Ver foto</a>";
+        } else {
+          alert("Error al subir la foto");
+        }
+      })
+      .catch(() => {
+        alert("No se pudo subir la foto");
+      });
+    }
+  </script>
+
+</body>
+</html>
